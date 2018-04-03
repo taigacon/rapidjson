@@ -213,6 +213,12 @@ public:
     }
 #endif
 
+#if RAPIDJSON_HAS_STDSTRINGVIEW
+    bool String(std::basic_string_view<Ch> str) {
+        return String(str.data(), SizeType(str.size()));
+    }
+#endif
+
     bool StartObject() {
         Prefix(kObjectType);
         new (level_stack_.template Push<Level>()) Level(false);
@@ -228,6 +234,13 @@ public:
     }
 #endif
 
+#if RAPIDJSON_HAS_STDSTRINGVIEW
+    bool Key(std::basic_string_view<Ch> str)
+    {
+      return Key(str.data(), SizeType(str.size()));
+    }
+#endif
+	
     bool EndObject(SizeType memberCount = 0) {
         (void)memberCount;
         RAPIDJSON_ASSERT(level_stack_.GetSize() >= sizeof(Level)); // not inside an Object
